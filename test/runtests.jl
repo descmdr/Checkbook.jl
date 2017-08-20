@@ -1,4 +1,5 @@
 using Base.Test
+using Currencies
 
 # Test infrastructure is working.
 @test true
@@ -20,19 +21,19 @@ using Base.Test
         # empty string for a description, and a zero dollar amount.
         @test transaction.date == Date(now())
         @test transaction.description == ""
-        @test transaction.amount === 0.0
+        @test format(transaction.amount; styles=[:us,:brief]) == "\$0.00"
 
         # Transaction's date can be updated.
-        transaction.date = Date("2017-01-01")
+        put!(transaction, Date("2017-01-01"))
         @test transaction.date == Date("2017-01-01")
 
         # Transaction's description can be updated.
-        transaction.description = "Initial balance"
+        put!(transaction, "Initial balance")
         @test transaction.description == "Initial balance"
 
         # Transaction's amount can be updated.
-        transaction.amount += 5
-        @test transaction.amount === 5.0
+        put!(transaction, 500)
+        @test format(transaction.amount; styles=[:us,:brief]) == "\$5.00"
 
     end
 
